@@ -12,8 +12,7 @@ public class Main {
         // Please test your Injector here. Feel free to push this class as a part of your solution
         Injector injector = Injector.getInjector();
         Object actual = injector.getInstance(FileReaderService.class);
-        injector.getInstance(ProductService.class);
-        ProductService productService = null;
+        ProductService productService = (ProductService) injector.getInstance(ProductService.class);
         List<Product> products = productService.getAllFromFile("products.txt");
         products.forEach(System.out::println);
     }

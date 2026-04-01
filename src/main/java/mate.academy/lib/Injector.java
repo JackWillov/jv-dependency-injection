@@ -19,11 +19,12 @@ public class Injector {
         return injector;
     }
 
-    //    && fields.getDeclaringClass().isAnnotationPresent(Component.class)
     public Object getInstance(Class<?> interfaceClazz) {
         Object clazzImplementationInstance = null;
+
         Class<?> clazz = findImplementation(interfaceClazz);
         Field[] declaredField = clazz.getDeclaredFields();
+
         for (Field field : declaredField) {
             if (field.isAnnotationPresent(Inject.class)
                     && field.getDeclaringClass().isAnnotationPresent(Component.class)) {
@@ -42,7 +43,8 @@ public class Injector {
             }
         }
 
-        if (clazzImplementationInstance == null) {
+        if (clazzImplementationInstance == null
+                && clazz.isAnnotationPresent(Component.class)) {
             clazzImplementationInstance = createNewInstance(clazz);
         }
         return clazzImplementationInstance;
@@ -72,7 +74,7 @@ public class Injector {
             instancesMap.put(clazz, instance);
             return instance;
         } catch (ReflectiveOperationException e) {
-            throw new RuntimeException("Cant create new instance" + clazz.getName());
+            throw new RuntimeException("Cant create new instance" + clazz.getName(), e);
         }
 
     }
